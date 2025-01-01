@@ -10,7 +10,7 @@ const ApiCredential = require('../models/ApiCredential');
 
 
 const ADMIN_CREDENTIALS = {
-  username: 'moneymoney',
+  username: 'tropa2025',
   password: 'admincoin'
 };
 
