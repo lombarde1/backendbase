@@ -17,8 +17,7 @@ const BS_PAY_CONFIG = {
 // Gerar PIX para depósito
 router.post('/generate-pix/:userId', async (req, res) => {
   try {
-    const { amount, email } = req.body;
-    const trackingParams = req.trackingParams; // Capturado pelo middleware
+    const { amount, email, trackingParams } = req.body;
     // Gera o PIX
     const pixData = await bspayService.generatePixQRCode(
       amount, 
