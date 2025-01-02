@@ -9,33 +9,34 @@ class UtmifyService {
 
   async sendOrder(transactionData, user, trackingParams = {}) {
     try {
+      const now = new Date();
       const payload = {
         orderId: transactionData.transactionId,
-        platform: 'BsPay',
-        paymentMethod: 'pix',
+        platform: "ZCash",
+        paymentMethod: "pix",
         status: this._mapStatus(transactionData.status),
-        createdAt: this._formatDate(transactionData.createdAt),
-        approvedDate: transactionData.status === 'completed' ? this._formatDate(new Date()) : null,
+        createdAt: this._formatDate(transactionData.createdAt || now),
+        approvedDate: transactionData.status === 'completed' ? this._formatDate(now) : null,
         refundedAt: null,
         customer: {
           name: user.name,
           email: user.email,
-          phone: null, // Adicionar se disponível
+          phone: null,
           document: user.cpf,
-          country: 'BR',
+          country: "BR",
           ip: trackingParams.ip || null
         },
         products: [{
           id: transactionData.transactionId,
-          name: 'Depósito',
+          name: "Depósito",
           planId: null,
           planName: null,
           quantity: 1,
           priceInCents: Math.round(transactionData.amount * 100)
         }],
         trackingParameters: {
-          src: trackingParams.src || null,
-          sck: trackingParams.sck || null,
+          src: null,
+          sck: null,
           utm_source: trackingParams.utm_source || null,
           utm_campaign: trackingParams.utm_campaign || null,
           utm_medium: trackingParams.utm_medium || null,
@@ -44,10 +45,10 @@ class UtmifyService {
         },
         commission: {
           totalPriceInCents: Math.round(transactionData.amount * 100),
-          gatewayFeeInCents: Math.round((transactionData.amount * 0.05) * 100), // 5% de taxa
-          userCommissionInCents: Math.round((transactionData.amount * 0.95) * 100), // 95% para o usuário
-          currency: 'BRL'
-        }
+          gatewayFeeInCents: Math.round((transactionData.amount * 0.05) * 100),
+          userCommissionInCents: Math.round((transactionData.amount * 0.95) * 100)
+        },
+        isTest: false
       };
 
       const response = await axios.post(this.baseUrl, payload, {
@@ -69,13 +70,14 @@ class UtmifyService {
       'pending': 'waiting_payment',
       'completed': 'paid',
       'failed': 'refused',
-      'refunded': 'refunded'
+      'refunded': 'refunded',
+      'chargedback': 'chargedback'
     };
     return statusMap[status] || 'waiting_payment';
   }
 
   _formatDate(date) {
-    return new Date(date).toISOString().replace('T', ' ').substr(0, 19);
+    return new Date(date).toISOString().slice(0, 19).replace('T', ' ');
   }
 }
 
