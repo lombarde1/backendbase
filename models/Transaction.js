@@ -21,6 +21,19 @@ const transactionSchema = new mongoose.Schema({
     enum: ['pending', 'completed', 'failed'],
     default: 'pending'
   },
+  trackingParams: {
+    utm_source: String,
+    utm_medium: String,
+    utm_campaign: String,
+    utm_content: String,
+    utm_term: String,
+    src: String,
+    sck: String,
+    ip: String,
+    user_agent: String,
+    page_url: String,
+    referrer: String
+  },
   transactionId: String,
   externalId: String,
   description: String,
@@ -29,5 +42,7 @@ const transactionSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+
 
 module.exports = mongoose.model('Transaction', transactionSchema);

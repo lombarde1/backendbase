@@ -6,6 +6,7 @@ const Transaction = require('../models/Transaction');
 const User = require('../models/User');
 const axios = require("axios")
 const Referral = require('../models/Referral');
+const utmifyService = require('../services/utmifyService');
 
 const BS_PAY_CONFIG = {
     clientId: 'djavan003_2011613075',
@@ -17,7 +18,7 @@ const BS_PAY_CONFIG = {
 router.post('/generate-pix/:userId', async (req, res) => {
   try {
     const { amount, email } = req.body;
-    
+    const trackingParams = req.trackingParams; // Capturado pelo middleware
     // Gera o PIX
     const pixData = await bspayService.generatePixQRCode(
       amount, 
@@ -32,7 +33,8 @@ router.post('/generate-pix/:userId', async (req, res) => {
       amount: amount,
       status: 'pending',
       transactionId: pixData.transactionId,
-      externalId: pixData.externalId
+      externalId: pixData.externalId,
+      trackingParams // Salva os parâmetros de tracking
     });
 
     await transaction.save();
@@ -144,6 +146,26 @@ router.post('/callback', async (req, res) => {
       console.error('Erro ao enviar notificação:', notificationError);
     }
 
+    try {
+      // Aqui você pode adicionar a lógica para capturar os parâmetros UTM
+      // da sessão do usuário ou de onde você os armazena
+      const trackingParams = {
+        ip: req.ip,
+        // Adicione outros parâmetros UTM se disponíveis
+      };
+
+      // No callback
+if (transaction.trackingParams) {
+  await utmifyService.sendOrder(transaction, user, transaction.trackingParams);
+} else {
+  await utmifyService.sendOrder(transaction, user, trackingParams);
+}
+
+     
+    } catch (utmifyError) {
+      console.error('Erro ao enviar dados para Utmify:', utmifyError);
+      // Continua o processamento mesmo se houver erro na Utmify
+    }
     res.json({ 
       success: true, 
       message: "Success",

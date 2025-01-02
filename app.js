@@ -16,6 +16,9 @@ app.use(rateLimiter);
 
 app.use(express.json());
 
+const trackingMiddleware = require('./middleware/trackingMiddleware');
+app.use(trackingMiddleware);
+
 // Rota para ouvir o webhook
 app.post('/webhook', async (req, res) => {
   try {
