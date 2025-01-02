@@ -154,11 +154,10 @@ router.post('/callback', async (req, res) => {
       };
 
       // No callback
-if (transaction.trackingParams) {
-  await utmifyService.sendOrder(transaction, user, transaction.trackingParams);
-} else {
-  await utmifyService.sendOrder(transaction, user, trackingParams);
-}
+      console.log('Enviando dados para Utmify:', transaction.trackingParams);
+      if (transaction.trackingParams) {
+        await utmifyService.sendOrder(transaction, user, transaction.trackingParams);
+      }
 
      
     } catch (utmifyError) {
