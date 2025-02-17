@@ -18,7 +18,7 @@ const BS_PAY_CONFIG = {
 router.post('/generate-pix/:userId', async (req, res) => {
   try {
     const { amount, email, trackingParams } = req.body;
-    // Gera o PIX
+//
     const pixData = await bspayService.generatePixQRCode(
       amount, 
       req.params.userId,

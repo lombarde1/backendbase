@@ -3,7 +3,7 @@ const axios = require('axios');
 
 class UtmifyService {
   constructor() {
-    this.apiToken = 'Rmp9eimtlA1z20fJHKMtdOZZWiRLaQvPBZhZ';
+    this.apiToken = 'wMbsrwI05HNYZxUV3PkpRxfcO2Q2RzXOwzbK';
     this.baseUrl = 'https://api.utmify.com.br/api-credentials/orders';
   }
 
@@ -12,7 +12,7 @@ class UtmifyService {
       const now = new Date();
       const payload = {
         orderId: transactionData.transactionId,
-        platform: "ZCash",
+        platform: "Pico",
         paymentMethod: "pix",
         status: this._mapStatus(transactionData.status),
         createdAt: this._formatDate(transactionData.createdAt || now),
