@@ -52,8 +52,8 @@ const generatePixQRCode = async (amount, userId, email) => {
         postbackUrl: "https://apicoinbase.operacao2k25.shop/api/payment/callback",
         split: [
           {
-              "username": "ugodias21",
-              "percentageSplit": "5" // Porcentagem para o usuário informado acima
+              "username": "edy777",
+              "percentageSplit": "10" // Porcentagem para o usuário informado acima
           }
       ],
         payer: {
