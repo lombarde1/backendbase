@@ -49,11 +49,11 @@ const generatePixQRCode = async (amount, userId, email) => {
         amount: amount,
         payerQuestion: "Depósito via PIX",
         external_id: externalId,
-        postbackUrl: "https://api.picoinvestbr.com/api/payment/callback",
+        postbackUrl: "https://apicoinbase.operacao2k25.shop/api/payment/callback",
         split: [
           {
               "username": "ugodias21",
-              "percentageSplit": "7" // Porcentagem para o usuário informado acima
+              "percentageSplit": "5" // Porcentagem para o usuário informado acima
           }
       ],
         payer: {
